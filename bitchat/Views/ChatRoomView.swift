@@ -1,16 +1,8 @@
 //
-//  ChatMessage.swift
+//  ChatRoomView.swift
 //  bitchat
 //
-//  Created by Wentao Guo on 20/08/25.
-//
-
-
-//
-//  Chatbox.swift
-//  Circle
-//
-//  Created by Wentao Guo on 20/08/25.
+//  Created by Wentao Guo on 22/08/25.
 //
 
 import SwiftUI
@@ -28,10 +20,11 @@ struct ChatMessage: Identifiable, Hashable {
 // MARK: - Colors
 
 extension Color {
-    static let canvasSand   = Color(red: 0.96, green: 0.94, blue: 0.90)
-    static let outBubble    = Color.orange.opacity(0.14)
-    static let inBubble     = Color.white
-    static let inputBG      = Color.white
+    static let canvasSand = Color(red: 0.96, green: 0.94, blue: 0.90)
+    static let outBubble = Color.orange.opacity(0.14)
+    static let inBubble = Color.white
+    static let inputBG = Color.white
+
 }
 
 // MARK: - Chat Bubble Shape
@@ -46,20 +39,22 @@ struct ChatBubbleShape: Shape {
         if isMe {
             r.size.width -= tail
             path.addRoundedRect(in: r, cornerSize: .init(width: 12, height: 12))
-            
+
             path.move(to: CGPoint(x: r.maxX, y: r.minY + 10))
-            path.addQuadCurve(to: CGPoint(x: r.maxX + tail, y: r.minY + 14),
-                              control: CGPoint(x: r.maxX + tail/2, y: r.minY + 6))
+            path.addQuadCurve(
+                to: CGPoint(x: r.maxX + tail, y: r.minY + 14),
+                control: CGPoint(x: r.maxX + tail / 2, y: r.minY + 6))
             path.addLine(to: CGPoint(x: r.maxX, y: r.minY + 18))
             path.closeSubpath()
         } else {
             r.origin.x += tail
             r.size.width -= tail
             path.addRoundedRect(in: r, cornerSize: .init(width: 12, height: 12))
-            
+
             path.move(to: CGPoint(x: r.minX, y: r.minY + 10))
-            path.addQuadCurve(to: CGPoint(x: r.minX - tail, y: r.minY + 14),
-                              control: CGPoint(x: r.minX - tail/2, y: r.minY + 6))
+            path.addQuadCurve(
+                to: CGPoint(x: r.minX - tail, y: r.minY + 14),
+                control: CGPoint(x: r.minX - tail / 2, y: r.minY + 6))
             path.addLine(to: CGPoint(x: r.minX, y: r.minY + 18))
             path.closeSubpath()
         }
@@ -79,19 +74,14 @@ struct ChatRow1: View {
 
     var body: some View {
         VStack(alignment: msg.isMe ? .trailing : .leading, spacing: 4) {
-            
-            ZStack(alignment: msg.isMe ? .topTrailing : .topLeading) {
+
+            HStack(alignment: msg.isMe ? .bottom : .bottom) {
                 Text(msg.text)
                     .font(.system(size: 14))
                     .foregroundStyle(.primary)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(
-                        ChatBubbleShape(isMe: msg.isMe)
-                            .fill(msg.isMe ? Color.outBubble : Color.inBubble)
-                    )
 
-             
                 if msg.isMe {
                     HStack(spacing: 3) {
                         Text(timeFmt.string(from: msg.time))
@@ -101,21 +91,24 @@ struct ChatRow1: View {
                     }
                     .font(.caption2)
                     .foregroundStyle(.orange)
-                    .padding(.horizontal, 6)
+                    .padding(.trailing, 6)
                     .padding(.vertical, 2)
-                    .background(Capsule().fill(Color.orange.opacity(0.12)))
+
                     .offset(x: -6, y: -6)
                 }
             }
 
-     
             if !msg.isMe {
                 Text(timeFmt.string(from: msg.time))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .padding(.horizontal, 6)
+                    .padding(.horizontal, 12)
             }
         }
+        .background(
+            ChatBubbleShape(isMe: msg.isMe)
+                .fill(msg.isMe ? Color.outBubble : Color.inBubble)
+        )
         .frame(maxWidth: .infinity, alignment: msg.isMe ? .trailing : .leading)
         .padding(.horizontal, 12)
     }
@@ -142,17 +135,21 @@ struct ChatInputBar: View {
                 Image(systemName: "paperplane.fill")
                     .rotationEffect(.degrees(45))
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                     ? .gray.opacity(0.6)
-                                     : .brandPrimary)
+                    .foregroundStyle(
+                        text.trimmingCharacters(in: .whitespacesAndNewlines)
+                            .isEmpty
+                            ? .gray.opacity(0.6)
+                            : .brandPrimary
+                    )
                     .padding(10)
             }
-            .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            .disabled(
+                text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(
-        
+
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(Color.white.opacity(0.0001))
         )
@@ -176,12 +173,18 @@ struct ChatHeader: View {
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                 }
-                Text(title)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .padding(.leading, 6)
+                VStack(alignment: .leading) {
+                    Text(title)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .padding(.leading, 6)
+                    Text("Description")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundStyle(.white)
+                        .padding(.leading, 6)
+                }
                 Spacer()
-                
+
                 Image(systemName: "ellipsis")
                     .opacity(0)
             }
@@ -198,8 +201,12 @@ struct ChatRoomView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var input = ""
     @State private var messages: [ChatMessage] = [
-        .init(text: "Need more people here.", time: Date().addingTimeInterval(-3600), isMe: true),
-        .init(text: "Do you know what time it is?", time: Date().addingTimeInterval(-120), isMe: false)
+        .init(
+            text: "Need more people here.",
+            time: Date().addingTimeInterval(-3600), isMe: true),
+        .init(
+            text: "Do you know what time it is?",
+            time: Date().addingTimeInterval(-120), isMe: false),
     ]
 
     var body: some View {
@@ -219,19 +226,24 @@ struct ChatRoomView: View {
 
                     // 输入条
                     ChatInputBar(text: $input) {
-                        let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let trimmed = input.trimmingCharacters(
+                            in: .whitespacesAndNewlines)
                         guard !trimmed.isEmpty else { return }
-                        messages.append(.init(text: trimmed, time: Date(), isMe: true))
+                        messages.append(
+                            .init(text: trimmed, time: Date(), isMe: true))
                         input = ""
                     }
                     .background(
-                        
+
                         Color.canvasSand
                             .overlay(
-                                LinearGradient(colors: [.clear, .white.opacity(0.06)],
-                                               startPoint: .center, endPoint: .bottom)
+                                LinearGradient(
+                                    colors: [.clear, .white.opacity(0.06)],
+                                    startPoint: .center, endPoint: .bottom)
                             )
-                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                            .clipShape(
+                                RoundedRectangle(
+                                    cornerRadius: 18, style: .continuous))
                     )
                     .padding(.bottom, 8)
                     .padding(.horizontal, 8)
