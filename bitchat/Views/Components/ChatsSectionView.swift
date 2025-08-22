@@ -18,7 +18,7 @@ struct ChatsSectionView: View {
                 .padding(.horizontal, 20)
         } else {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeaderView(title: "Views", textStyle: .title)
+                SectionHeaderView(title: "Views", textStyle: .largeTitle)
                 .padding(.horizontal, 20)
 
                 ListLikeContainer {

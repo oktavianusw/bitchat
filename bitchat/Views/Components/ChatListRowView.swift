@@ -12,7 +12,14 @@ struct ChatListRowView: View {
     var accent: Color = Color.brandPrimary
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            LeadingIconCircleView(systemName: item.iconSystemName, bg: item.iconBackground, size: 44)
+            ZStack(alignment: .bottomTrailing) {
+                LeadingIconCircleView(systemName: item.iconSystemName, bg: item.iconBackground, size: 44)
+                if let presence = item.presence, presence != .unknown {
+                    PresenceDot(presence: presence, size: 10)
+                        .offset(x: -2, y: -2)
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
             
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {

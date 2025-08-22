@@ -8,7 +8,16 @@
 import SwiftUI
 struct ChatsView: View {
     @EnvironmentObject var chatStore: ChatStore
-
+    @State private var openSeeMoreSheet = false
+    var profiles: [NearbyProfile] = [
+        .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
+        .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
+        .init(name: "Putri",   team: "Team 3", image: Image("picture3"), initials: "PT"),
+        .init(name: "Fahrel",    team: "Team 5", image: Image("picture1"), initials: "FA"),
+        .init(name: "Bam",    team: "Team 4", image: Image("picture2"), initials: "BAM"),
+        .init(name: "Wentao",    team: "Team 1", image: Image("picture4"), initials: "WE")
+    ]
+    
     init() {
         let appearance = UISegmentedControl.appearance()
         appearance.selectedSegmentTintColor = UIColor(Color.brandPrimary)
@@ -31,13 +40,8 @@ struct ChatsView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 16) {
-                NearYouSectionView(profiles: [
-                    .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
-                    .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
-                    .init(name: "Putri",   team: "Team 3", image: Image("picture3"), initials: "PT"),
-                    .init(name: "Agus",    team: "Team 4", image: Image("picture4"), initials: "AG")
-                ],
-                onTapProfile: { _ in print("Tapped") })
+                NearYouSectionView(profiles: profiles,
+                                   onTapProfile: { _ in print("Tapped") }, onTapSeeMore: { openSeeMoreSheet.toggle() })
                 
                 ChatsSectionView(items: chatStore.chatRows)
                 
@@ -46,12 +50,7 @@ struct ChatsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        NewCircleView(nearbyProfiles: [
-                            .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
-                            .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
-                            .init(name: "Putri",   team: "Team 3", image: Image("picture3"), initials: "PT"),
-                            .init(name: "Agus",    team: "Team 4", image: Image("picture4"), initials: "AG")
-                        ],
+                        NewCircleView(nearbyProfiles: profiles,
                         onFinish: { draft in
                             chatStore.addGroup(from: draft)
                         }
@@ -68,6 +67,31 @@ struct ChatsView: View {
                     .accessibilityHint("Create a new group.")
                     .accessibilityAddTraits(.isButton)
                 }
+            }
+            .sheet(isPresented: $openSeeMoreSheet) {
+                VStack {
+                    SectionHeaderView(title: "Near You")
+                    if profiles.isEmpty {
+                        NearbyEmptyView()
+                    } else {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 16)],
+                                  spacing: 16) {
+                            ForEach(profiles) { p in
+                                NearbyProfileCardView(profile: p, isScanning: false) {
+                                    print("profile tapped: \(p.name)")
+                                }
+                            }
+                        }
+                                  .padding(.horizontal, 12)
+                                  .padding(.vertical, 4)
+                                  .accessibilityLabel("Nearby people list, horizontal")
+                    }
+                    Spacer()
+                }
+                .padding()
+                .presentationDetents([.fraction(0.75)])
+                .presentationDragIndicator(.visible)
+                .background(Color.activityView)
             }
         }
     }

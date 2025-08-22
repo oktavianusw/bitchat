@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+enum Presence: String, Codable {
+    case inRange, outOfRange, unknown
+}
+
 enum ChatType: String, Codable {
     case group
     case privateDM
@@ -44,31 +48,36 @@ struct ChatItem: Identifiable {
     var pinned: Bool = false
     var iconSystemName: String = "megaphone.fill"
     var iconBackground: Color = Color(.systemYellow)
+    var presence: Presence?
 }
 
 extension ChatItem {
     init(chat: Chat) {
         let df = DateFormatter()
         df.dateFormat = "HH:mm"
-        
-        self.title = chat.title
+
+        title = chat.title
         switch chat.type {
         case .group:
-            self.subtitle = chat.lastPreview ?? "Group • \(chat.members.count) members"
-            self.iconSystemName = "person.3.fill"
-            self.iconBackground = chat.color ?? .gray
+            subtitle = chat.lastPreview ?? "Group • \(chat.members.count) members"
+            iconSystemName = "person.3.fill"
+            iconBackground = chat.color ?? .gray
+            presence = nil
         case .privateDM:
-            self.subtitle = chat.lastPreview ?? "Private"
-            self.iconSystemName = "person.fill"
-            self.iconBackground = .blue
+            subtitle = chat.lastPreview ?? "Private"
+            iconSystemName = "person.fill"
+            iconBackground = .blue
+            presence = chat.members.first?.presence ?? .unknown
         case .broadcast:
-            self.subtitle = chat.lastPreview ?? "Public broadcast"
-            self.iconSystemName = "megaphone.fill"
-            self.iconBackground = .yellow
+            subtitle = chat.lastPreview ?? "Public broadcast"
+            iconSystemName = "megaphone.fill"
+            iconBackground = .yellow
+            presence = nil
         }
-        
-        self.time = df.string(from: chat.lastActivity)
-        self.unreadCount = chat.unreadCount
-        self.pinned = chat.pinned
+
+        time = df.string(from: chat.lastActivity)
+        unreadCount = chat.unreadCount
+        pinned = chat.pinned
     }
 }
+

@@ -12,8 +12,8 @@ struct NearbyProfileCardView: View {
     
     var size: CGFloat = 72
     var ringWidth: CGFloat = 4
-    var action: (() -> Void)? = nil
     var isScanning: Bool = true
+    var action: (() -> Void)? = nil
     
     var body: some View {
         content

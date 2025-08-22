@@ -45,7 +45,9 @@ extension ChatStore {
     static func withSamples() -> ChatStore {
         let store = ChatStore()
         
-        func chat(_ title: String, type: ChatType, color: Color? = nil, timeHHmm: String, unread: Int, pinned: Bool, iconBG: Color? = nil) -> Chat {
+        func chat(_ title: String, type: ChatType, color: Color? = nil,
+                  timeHHmm: String, unread: Int, pinned: Bool,
+                  iconBG: Color? = nil) -> Chat {
             let comps = timeHHmm.split(separator: ":").compactMap { Int($0) }
             var date = Date()
             if comps.count == 2 {
@@ -53,21 +55,38 @@ extension ChatStore {
                 date = cal.date(bySettingHour: comps[0], minute: comps[1], second: 0, of: Date()) ?? Date()
             }
             let last = ChatMessage(text: "Sample preview", time: date, isMe: false)
+            
             var members: [NearbyProfile] = []
             switch type {
-            case .privateDM: members = [.init(name: "Ayu", team: "Team 2", image: nil, initials: "AY")]
+            case .privateDM:
+                members = [.init(name: "Ayu", team: "Team 2", image: nil, initials: "AY", presence: .outOfRange)]
             default: break
             }
-            var c = Chat(type: type, title: title, color: color ?? iconBG, about: nil, members: members, messages: [last])
+            
+            var c = Chat(type: type, title: title, color: color ?? iconBG, about: nil,
+                         members: members, messages: [last])
             c.unreadCount = unread
             c.pinned = pinned
             return c
         }
         
-        store.chats = [
-            chat("Public Channel", type: .broadcast, color: .yellow, timeHHmm: "19:45", unread: 1, pinned: true),
-            chat("Design",         type: .group,     color: Color(.systemTeal), timeHHmm: "18:12", unread: 0, pinned: false)
+        var dmChat = chat("Ayu", type: .privateDM,
+                          timeHHmm: "20:30", unread: 2, pinned: false)
+        dmChat.messages = [
+            ChatMessage(text: "Hey, how are you?", time: Date().addingTimeInterval(-3600), isMe: false),
+            ChatMessage(text: "I'm fine, thanks!", time: Date().addingTimeInterval(-1800), isMe: true),
+            ChatMessage(text: "Are you coming tomorrow?", time: Date().addingTimeInterval(-1200), isMe: false),
+            ChatMessage(text: "Yes, see you!", time: Date().addingTimeInterval(-600), isMe: true)
         ]
+        
+        store.chats = [
+            chat("Public Channel", type: .broadcast,
+                 color: .yellow, timeHHmm: "19:45", unread: 1, pinned: true),
+            chat("Design", type: .group,
+                 color: Color(.systemTeal), timeHHmm: "18:12", unread: 0, pinned: false),
+            dmChat
+        ]
+        
         return store
     }
 }
