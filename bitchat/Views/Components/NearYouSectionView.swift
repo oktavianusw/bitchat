@@ -20,7 +20,7 @@ struct NearYouSectionView: View {
                     .padding(.horizontal, 12)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 16) {
                         ForEach(profiles) { p in
                             NearbyProfileCardView(profile: p) {
                                 onTapProfile?(p)

@@ -17,7 +17,7 @@ struct NearbyProfileCardView: View {
     
     var body: some View {
         content
-            .frame(width: size + 24)
+            .frame(width: size)
     }
     
     @ViewBuilder

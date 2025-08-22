@@ -7,18 +7,7 @@
 
 import SwiftUI
 struct ChatsView: View {
-    let sample: [ChatItem] = [
-        ChatItem(title: "Public Channel",
-                 subtitle: "Saputra Team 1 is typing...",
-                 time: "19:45", unreadCount: 1, pinned: true,
-                 iconSystemName: "megaphone.fill",
-                 iconBackground: Color(.systemYellow)),
-        ChatItem(title: "Design",
-                 subtitle: "Ayu: uploaded a new mock",
-                 time: "18:12", unreadCount: 0, pinned: false,
-                 iconSystemName: "paintbrush.fill",
-                 iconBackground: Color(.systemTeal))
-    ]
+    @EnvironmentObject var chatStore: ChatStore
 
     init() {
         let appearance = UISegmentedControl.appearance()
@@ -50,17 +39,29 @@ struct ChatsView: View {
                 ],
                 onTapProfile: { _ in print("Tapped") })
                 
-                ChatsSectionView(items: sample)
+                ChatsSectionView(items: chatStore.chatRows)
                 
                 Spacer()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        
-                    }) {
+                    NavigationLink {
+                        NewCircleView(nearbyProfiles: [
+                            .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
+                            .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
+                            .init(name: "Putri",   team: "Team 3", image: Image("picture3"), initials: "PT"),
+                            .init(name: "Agus",    team: "Team 4", image: Image("picture4"), initials: "AG")
+                        ],
+                        onFinish: { draft in
+                            chatStore.addGroup(from: draft)
+                        }
+                        )
+                    } label: {
                         Image("create-circle")
-                            .frame(width: 44, height: 44)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                            .padding(8)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Add")
@@ -73,5 +74,8 @@ struct ChatsView: View {
 }
 
 #Preview {
-    ChatsView()
+    return NavigationStack {
+        ChatsView()
+    }
+    .environmentObject(ChatStore.withSamples())
 }

@@ -7,7 +7,10 @@
 import SwiftUI
 
 struct Homepage: View {
-    init() {
+    @StateObject private var chatStore = ChatStore()
+    
+    init(store: ChatStore = ChatStore()) {
+        _chatStore = StateObject(wrappedValue: store)
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.backgroundColor = UIColor(Color.brandPrimary)
@@ -34,24 +37,27 @@ struct Homepage: View {
     }
 
     var body: some View {
-        TabView {
-            ChatsView()
-                .tabItem {
-                    Image("message-question")
-                        .renderingMode(.template)
-                    Text("Chats")
-                }
-            Text("Profile")
-                .tabItem {
-                    Image("personalcard")
-                        .renderingMode(.template)
-                    Text("Profile")
-                }
+        NavigationStack {
+            TabView {
+                ChatsView()
+                    .tabItem {
+                        Image("message-question")
+                            .renderingMode(.template)
+                        Text("Chats")
+                    }
+                Text("Profile")
+                    .tabItem {
+                        Image("personalcard")
+                            .renderingMode(.template)
+                        Text("Profile")
+                    }
+            }
+            .tint(Color.brandPrimary)
         }
-        .tint(Color.brandPrimary)
+        .environmentObject(chatStore)
     }
 }
 
 #Preview {
-    Homepage()
+    Homepage(store: ChatStore.withSamples())
 }

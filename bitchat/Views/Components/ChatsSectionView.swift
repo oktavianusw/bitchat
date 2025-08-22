@@ -15,6 +15,7 @@ struct ChatsSectionView: View {
     var body: some View {
         if items.isEmpty {
             ChatsEmptyView(accent: accent)
+                .padding(.horizontal, 20)
         } else {
             VStack(alignment: .leading, spacing: 12) {
                 SectionHeaderView(title: "Views", textStyle: .title)
@@ -54,12 +55,10 @@ private struct ListLikeContainer<Content: View>: View {
 #Preview("Chats – With items") {
     let sample: [ChatItem] = [
         ChatItem(title: "Public Channel",
-                 subtitle: "Saputra Team 1 is typing...",
                  time: "19:45", unreadCount: 1, pinned: true,
                  iconSystemName: "megaphone.fill",
                  iconBackground: Color(.systemYellow)),
         ChatItem(title: "Design",
-                 subtitle: "Ayu: uploaded a new mock",
                  time: "18:12", unreadCount: 0, pinned: false,
                  iconSystemName: "paintbrush.fill",
                  iconBackground: Color(.systemTeal))

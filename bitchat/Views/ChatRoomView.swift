@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-// MARK: - Model
-
-struct ChatMessage: Identifiable, Hashable {
-    let id = UUID()
-    let text: String
-    let time: Date
-    let isMe: Bool
-    var delivered: Bool = true
-}
-
 // MARK: - Colors
 
 extension Color {
