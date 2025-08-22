@@ -56,7 +56,16 @@ struct ChatsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    CircleIconButtonView()
+                    Button(action: {
+                        
+                    }) {
+                        Image("create-circle")
+                            .frame(width: 44, height: 44)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Add")
+                    .accessibilityHint("Create a new group.")
+                    .accessibilityAddTraits(.isButton)
                 }
             }
         }

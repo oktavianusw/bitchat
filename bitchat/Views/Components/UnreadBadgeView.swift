@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UnreadBadgeView: View {
     var count: Int
-    var accent: Color = .brandPrimary
+    var accent: Color = Color.brandPrimary
     
     var body: some View {
         if count > 0 {

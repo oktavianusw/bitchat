@@ -48,7 +48,7 @@ struct Homepage: View {
                     Text("Profile")
                 }
         }
-        .tint(.brandPrimary)
+        .tint(Color.brandPrimary)
     }
 }
 

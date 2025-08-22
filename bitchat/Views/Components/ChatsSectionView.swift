@@ -17,12 +17,7 @@ struct ChatsSectionView: View {
             ChatsEmptyView(accent: accent)
         } else {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Chats")
-                        .font(.system(.largeTitle, weight: .bold))
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                }
+                SectionHeaderView(title: "Views", textStyle: .title)
                 .padding(.horizontal, 20)
 
                 ListLikeContainer {
@@ -52,7 +47,7 @@ private struct ListLikeContainer<Content: View>: View {
 }
 
 #Preview("Chats – Empty") {
-    ChatsSectionView(items: [], accent: .brandPrimary)
+    ChatsSectionView(items: [], accent: Color.brandPrimary)
         .background(Color(.systemBackground))
 }
 
@@ -69,6 +64,6 @@ private struct ListLikeContainer<Content: View>: View {
                  iconSystemName: "paintbrush.fill",
                  iconBackground: Color(.systemTeal))
     ]
-    ChatsSectionView(items: sample, accent: .brandPrimary)
+    ChatsSectionView(items: sample, accent: Color.brandPrimary)
         .background(Color(.systemBackground))
 }

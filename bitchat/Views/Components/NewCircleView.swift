@@ -62,7 +62,10 @@ struct NewCircleView: View {
                     .offset(x:40)
             }
             VStack(spacing: 8) {
-                EditableCircleAvatar(onEdit: { showSheet = true }, color: $draft.color)
+                EditableCircleAvatar(onEdit: {
+                    step = .name
+                    showSheet = true
+                }, color: $draft.color)
                 Text(draft.name)
                     .font(.title3.weight(.semibold))
             }
@@ -264,20 +267,28 @@ struct StepReview: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .center, spacing: 8) {
                     Text("Members (\(draft.selectedMembers.count))")
-                        .font(.system(.largeTitle, weight: .bold))
-                        .foregroundStyle(.primary)
+                        .font(.system(.title, weight: .bold))
+                        .foregroundStyle(Color.textHeader)
                         .accessibilityAddTraits(.isHeader)
-                    CircleIconButtonView(
-                        systemIcon: "pencil",
-                        diameter: 28,
-                        accessibilityLabel: "Edit About",
-                        accessibilityText: "Edit"
-                    ) { onEditMembers?() }
+                    Button(action: onEditMembers ?? {}) {
+                        Image("union")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 13, height: 13)
+                            .padding(6)
+                            .foregroundStyle(.white)
+                            .frame(width: 28, height: 28)
+                            .background(Circle().fill(Color.brandPrimary))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Edit")
+                    .accessibilityHint("Edit members")
+                    .accessibilityAddTraits(.isButton)
                 }
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: cardSize), spacing: spacing, alignment: .top)], alignment: .leading, spacing: spacing) {
                     ForEach(draft.selectedMembers) { m in
                         VStack(spacing: 6) {
-                            NearbyProfileCardView(profile: m)
+                            NearbyProfileCardView(profile: m, isScanning: false)
                                 .frame(width: cardSize + 24)
                         }
                         .accessibilityLabel("\(m.name)")
@@ -290,17 +301,23 @@ struct StepReview: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .center, spacing: 8) {
                     Text("About")
-                        .font(.system(.largeTitle, weight: .bold))
-                        .foregroundStyle(.primary)
+                        .font(.system(.title, weight: .bold))
+                        .foregroundStyle(Color.textHeader)
                         .accessibilityAddTraits(.isHeader)
-                    CircleIconButtonView(
-                        systemIcon: "pencil",
-                        diameter: 28,
-                        accessibilityLabel: "Edit About",
-                        accessibilityText: "Edit"
-                    ) {
-                        onEditAbout?()
+                    Button(action: onEditAbout ?? {}) {
+                        Image("union")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 13, height: 13)
+                            .padding(6)
+                            .foregroundStyle(.white)
+                            .frame(width: 28, height: 28)
+                            .background(Circle().fill(Color.brandPrimary))
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Edit")
+                    .accessibilityHint("Edit about")
+                    .accessibilityAddTraits(.isButton)
                 }
                 InfoBox(text: .constant(draft.about), placeholder: nil, isDisabled: true)
             }
@@ -392,7 +409,7 @@ private struct MemberRow: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .strokeBorder(.pink, lineWidth: ringWidth)
+                    .strokeBorder(Color.white, lineWidth: ringWidth)
                     .frame(width: size, height: size)
                     .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
                 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatsEmptyView: View {
-    var accent: Color = .brandPrimary
+    var accent: Color = Color.brandPrimary
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
