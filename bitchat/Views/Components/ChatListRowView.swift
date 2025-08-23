@@ -50,7 +50,9 @@ struct ChatListRowView: View {
                         .font(.caption)
                         .foregroundStyle(Color.brandPrimary)
                 }
-                UnreadBadgeView(count: 2)
+                if item.unreadCount > 0 {
+                    UnreadBadgeView(count: item.unreadCount)
+                }
             }
         }
         .padding(.vertical, 8)

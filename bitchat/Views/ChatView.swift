@@ -9,6 +9,7 @@ import SwiftUI
 struct ChatsView: View {
     @EnvironmentObject var chatStore: ChatStore
     @State private var openSeeMoreSheet = false
+    @State private var navigationPath = NavigationPath()
     var profiles: [NearbyProfile] = [
         .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
         .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
@@ -38,15 +39,19 @@ struct ChatsView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
-            NearYouSectionView(profiles: profiles,
-                               onTapProfile: { _ in print("Tapped") }, onTapSeeMore: { openSeeMoreSheet.toggle() })
+        NavigationStack(path: $navigationPath) {
+            VStack(spacing: 16) {
+                NearYouSectionView(profiles: profiles,
+                                   onTapProfile: { profile in
+                    let newChat = chatStore.addPrivateDM(with: profile)
+                    navigationPath.append(newChat)
+                }, onTapSeeMore: { openSeeMoreSheet.toggle() })
             
             ChatsSectionView(items: chatStore.chatRows)
             
-            Spacer()
-        }
-        .toolbar {
+                Spacer()
+            }
+            .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink {
                     NewCircleView(nearbyProfiles: profiles,
@@ -66,8 +71,8 @@ struct ChatsView: View {
                 .accessibilityHint("Create a new group.")
                 .accessibilityAddTraits(.isButton)
             }
-        }
-        .sheet(isPresented: $openSeeMoreSheet) {
+            }
+            .sheet(isPresented: $openSeeMoreSheet) {
                 VStack {
                     SectionHeaderView(title: "Near You")
                     if profiles.isEmpty {
@@ -77,7 +82,9 @@ struct ChatsView: View {
                                   spacing: 16) {
                             ForEach(profiles) { p in
                                 NearbyProfileCardView(profile: p, isScanning: false) {
-                                    print("profile tapped: \(p.name)")
+                                    let newChat = chatStore.addPrivateDM(with: p)
+                                    navigationPath.append(newChat)
+                                    openSeeMoreSheet = false
                                 }
                             }
                         }
@@ -92,7 +99,16 @@ struct ChatsView: View {
                 .presentationDragIndicator(.visible)
                 .background(Color.activityView)
             }
+            .navigationDestination(for: Chat.self) { chat in
+                ChatRoomView(chat: chat, nearbyProfiles: profiles)
+            }
+            .navigationDestination(for: ChatItem.self) { chatItem in
+                if let chat = chatStore.chat(for: chatItem.id) {
+                    ChatRoomView(chat: chat, nearbyProfiles: profiles)
+                }
+            }
         }
+    }
 }
 
 #Preview {

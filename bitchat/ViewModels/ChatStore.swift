@@ -34,9 +34,11 @@ final class ChatStore: ObservableObject {
         chats.insert(chat, at: 0)
     }
     
-    func addPrivateDM(with other: NearbyProfile) {
+    @discardableResult
+    func addPrivateDM(with other: NearbyProfile) -> Chat {
         let chat = Chat(type: .privateDM, title: other.name, color: nil, about: nil, members: [other], messages: [])
         chats.insert(chat, at: 0)
+        return chat
     }
     
     func addBroadcast(title: String, about: String?) {
