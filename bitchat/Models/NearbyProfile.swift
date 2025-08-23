@@ -5,7 +5,6 @@
 //  Created by Saputra on 19/08/25.
 //
 
-import Foundation
 import SwiftUI
 
 struct NearbyProfile: Identifiable {
@@ -14,4 +13,5 @@ struct NearbyProfile: Identifiable {
     let team: String
     let image: Image?
     let initials: String
+    var presence: Presence = .unknown
 }

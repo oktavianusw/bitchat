@@ -12,11 +12,12 @@ struct NearbyProfileCardView: View {
     
     var size: CGFloat = 72
     var ringWidth: CGFloat = 4
+    var isScanning: Bool = true
     var action: (() -> Void)? = nil
     
     var body: some View {
         content
-            .frame(width: size + 24)
+            .frame(width: size)
     }
     
     @ViewBuilder
@@ -48,7 +49,7 @@ struct NearbyProfileCardView: View {
     private var avatarView: some View {
         ZStack {
             Circle()
-                .strokeBorder(.brandPrimary, lineWidth: ringWidth)
+                .strokeBorder(isScanning ? Color.brandPrimary : Color.white, lineWidth: ringWidth)
                 .frame(width: size, height: size)
                 .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
             

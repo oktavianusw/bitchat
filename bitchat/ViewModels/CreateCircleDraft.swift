@@ -12,9 +12,9 @@ final class CreateCircleDraft: ObservableObject {
     @Published var name: String
     @Published var color: Color
     @Published var selectedMembers: [NearbyProfile] = []
-    @Published var about: String = ""
+    @Published var about: String = "New Group"
     
-    init(name: String = "", color: Color = .blue, selectedMembers: [NearbyProfile] = []) {
+    init(name: String = "", about: String = "New Group", color: Color = .blue, selectedMembers: [NearbyProfile] = []) {
         self.name = name
         self.color = color
         self.selectedMembers = selectedMembers

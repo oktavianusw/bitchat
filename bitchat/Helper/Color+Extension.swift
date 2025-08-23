@@ -1,3 +1,4 @@
+
 //
 //  Color+Extension.swift
 //  bitchat_iOS
@@ -10,4 +11,7 @@ import SwiftUI
 extension Color {
     static let textPrimary = Color("textPrimary")
     static let textSecondary = Color("textSecondary")
+    static let customBlack = Color("black")
+    static let backgroundColor = Color("backgroundColor")
 }
+

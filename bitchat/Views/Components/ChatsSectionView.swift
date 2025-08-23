@@ -10,26 +10,21 @@ import SwiftUI
 struct ChatsSectionView: View {
     var items: [ChatItem]
     var accent: Color = .orange
-    var onTapRow: ((ChatItem) -> Void)? = nil
+    @EnvironmentObject var chatStore: ChatStore
+//    var onTapRow: ((ChatItem) -> Void)? = nil
     
     var body: some View {
         if items.isEmpty {
             ChatsEmptyView(accent: accent)
+                .padding(.horizontal, 20)
         } else {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Chats")
-                        .font(.system(.largeTitle, weight: .bold))
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                }
+                SectionHeaderView(title: "Chats", textStyle: .largeTitle)
                 .padding(.horizontal, 20)
 
                 ListLikeContainer {
                     ForEach(items) { item in
-                        Button {
-                            onTapRow?(item)
-                        } label: {
+                        NavigationLink(value: item) {
                             ChatListRowView(item: item, accent: accent)
                         }
                         .buttonStyle(.plain)
@@ -52,23 +47,21 @@ private struct ListLikeContainer<Content: View>: View {
 }
 
 #Preview("Chats – Empty") {
-    ChatsSectionView(items: [], accent: .brandPrimary)
+    ChatsSectionView(items: [], accent: Color.brandPrimary)
         .background(Color(.systemBackground))
 }
 
 #Preview("Chats – With items") {
     let sample: [ChatItem] = [
-        ChatItem(title: "Public Channel",
-                 subtitle: "Saputra Team 1 is typing...",
+        ChatItem(id: UUID(), title: "Public Channel",
                  time: "19:45", unreadCount: 1, pinned: true,
                  iconSystemName: "megaphone.fill",
                  iconBackground: Color(.systemYellow)),
-        ChatItem(title: "Design",
-                 subtitle: "Ayu: uploaded a new mock",
+        ChatItem(id: UUID(),title: "Design",
                  time: "18:12", unreadCount: 0, pinned: false,
                  iconSystemName: "paintbrush.fill",
                  iconBackground: Color(.systemTeal))
     ]
-    ChatsSectionView(items: sample, accent: .brandPrimary)
+    ChatsSectionView(items: sample, accent: Color.brandPrimary)
         .background(Color(.systemBackground))
 }

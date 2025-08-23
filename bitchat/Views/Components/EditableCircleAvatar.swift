@@ -29,9 +29,10 @@ struct EditableCircleAvatar: View {
                 .overlay(Circle().stroke(Color.background, lineWidth: 8))
 
             Button(action: onEdit) {
-                Image(systemName: "pencil")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.white)
+                Image("union")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 13, height: 13)
                     .padding(6)
                     .background(Circle().fill(Color.black.opacity(0.6)))
                     .overlay(Circle().stroke(Color.background, lineWidth: 2))

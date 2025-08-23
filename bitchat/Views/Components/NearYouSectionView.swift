@@ -10,17 +10,29 @@ import SwiftUI
 struct NearYouSectionView: View {
     let profiles: [NearbyProfile]
     var onTapProfile: ((NearbyProfile) -> Void)? = nil
+    var onTapSeeMore: (() -> Void)? = nil
+    var isSeeMore: Bool = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeaderView(title: "Near You")
-                .padding(.horizontal)
-            
+            HStack(alignment: .firstTextBaseline) {
+                SectionHeaderView(title: "Near You", textStyle: .title)
+                Button(action: {
+                    onTapSeeMore?()
+                }) {
+                    Text("See More")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color.brandPrimary)
+                }
+            }
+            .padding(.horizontal)
             if profiles.isEmpty {
                 NearbyEmptyView()
                     .padding(.horizontal, 12)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 16) {
                         ForEach(profiles) { p in
                             NearbyProfileCardView(profile: p) {
                                 onTapProfile?(p)

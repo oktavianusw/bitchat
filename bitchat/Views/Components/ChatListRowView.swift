@@ -9,10 +9,17 @@ import SwiftUI
 
 struct ChatListRowView: View {
     var item: ChatItem
-    var accent: Color = .brandPrimary
+    var accent: Color = Color.brandPrimary
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            LeadingIconCircleView(systemName: item.iconSystemName, bg: item.iconBackground, size: 44)
+            ZStack(alignment: .bottomTrailing) {
+                LeadingIconCircleView(systemName: item.iconSystemName, bg: item.iconBackground, size: 44)
+                if let presence = item.presence, presence != .unknown {
+                    PresenceDot(presence: presence, size: 10)
+                        .offset(x: -2, y: -2)
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
             
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
@@ -41,9 +48,11 @@ struct ChatListRowView: View {
                 if let time = item.time {
                     Text(time)
                         .font(.caption)
-                        .foregroundStyle(.brandPrimary)
+                        .foregroundStyle(Color.brandPrimary)
                 }
-                UnreadBadgeView(count: 2)
+                if item.unreadCount > 0 {
+                    UnreadBadgeView(count: item.unreadCount)
+                }
             }
         }
         .padding(.vertical, 8)

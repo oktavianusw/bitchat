@@ -20,7 +20,7 @@ struct CircleIconButtonView: View {
                 .font(.system(size: diameter * 0.45, weight: .semibold))
                 .foregroundStyle(.white)
                 .frame(width: diameter, height: diameter)
-                .background(Circle().fill(.brandPrimary))
+                .background(Circle().fill(Color.brandPrimary))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityText ?? "Add")
