@@ -38,37 +38,36 @@ struct ChatsView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 16) {
-                NearYouSectionView(profiles: profiles,
-                                   onTapProfile: { _ in print("Tapped") }, onTapSeeMore: { openSeeMoreSheet.toggle() })
-                
-                ChatsSectionView(items: chatStore.chatRows)
-                
-                Spacer()
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        NewCircleView(nearbyProfiles: profiles,
-                        onFinish: { draft in
-                            chatStore.addGroup(from: draft)
-                        }
-                        )
-                    } label: {
-                        Image("create-circle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                            .padding(8)
+        VStack(spacing: 16) {
+            NearYouSectionView(profiles: profiles,
+                               onTapProfile: { _ in print("Tapped") }, onTapSeeMore: { openSeeMoreSheet.toggle() })
+            
+            ChatsSectionView(items: chatStore.chatRows)
+            
+            Spacer()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink {
+                    NewCircleView(nearbyProfiles: profiles,
+                                  onFinish: { draft in
+                        chatStore.addGroup(from: draft)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel("Add")
-                    .accessibilityHint("Create a new group.")
-                    .accessibilityAddTraits(.isButton)
+                    )
+                } label: {
+                    Image("create-circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 28, height: 28)
+                        .padding(8)
                 }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Add")
+                .accessibilityHint("Create a new group.")
+                .accessibilityAddTraits(.isButton)
             }
-            .sheet(isPresented: $openSeeMoreSheet) {
+        }
+        .sheet(isPresented: $openSeeMoreSheet) {
                 VStack {
                     SectionHeaderView(title: "Near You")
                     if profiles.isEmpty {
@@ -94,7 +93,6 @@ struct ChatsView: View {
                 .background(Color.activityView)
             }
         }
-    }
 }
 
 #Preview {

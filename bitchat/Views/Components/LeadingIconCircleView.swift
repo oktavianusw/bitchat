@@ -15,9 +15,11 @@ struct LeadingIconCircleView: View {
     var body: some View {
         ZStack {
             Circle().fill(bg)
-            Image(systemName: systemName)
-                .font(.system(size: size * 0.45, weight: .semibold))
-                .foregroundStyle(.white)
+            if !systemName.isEmpty {
+                Image(systemName: systemName)
+                    .font(.system(size: size * 0.45, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)

@@ -16,6 +16,10 @@ final class ChatStore: ObservableObject {
             .map(ChatItem.init(chat:))
     }
     
+    func chat(for id: UUID) -> Chat? {
+        chats.first(where: { $0.id == id })
+    }
+    
     func addGroup(from draft: CreateCircleDraft) {
         let now = Date()
         let welcome = ChatMessage(text: "Circle created", time: now, isMe: false)
@@ -38,6 +42,12 @@ final class ChatStore: ObservableObject {
     func addBroadcast(title: String, about: String?) {
         let chat = Chat(type: .broadcast, title: title, color: .yellow, about: about, members: [], messages: [])
         chats.insert(chat, at: 0)
+    }
+    
+    func updateChat(_ updatedChat: Chat) {
+        if let index = chats.firstIndex(where: { $0.id == updatedChat.id }) {
+            chats[index] = updatedChat
+        }
     }
 }
 

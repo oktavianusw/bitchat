@@ -150,38 +150,101 @@ struct ChatInputBar: View {
 // MARK: - Header Bar
 
 struct ChatHeader: View {
-    let title: String
+    let chat: Chat
+    let nearbyProfiles: [NearbyProfile]
     var back: () -> Void
-
+    var onGroupUpdated: ((Chat) -> Void)?
+    
+    
     var body: some View {
         ZStack {
             Color.brandPrimary.ignoresSafeArea(edges: .top)
-
+            
             HStack {
                 Button(action: back) {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                 }
-                VStack(alignment: .leading) {
-                    Text(title)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .padding(.leading, 6)
-                    Text("Description")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundStyle(.white)
-                        .padding(.leading, 6)
+                if chat.type == .privateDM {
+                    VStack(alignment: .leading) {
+                        Text(chat.title)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.leading, 6)
+                        Text(statusText)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(.white)
+                            .padding(.leading, 6)
+                    }
+                    Spacer()
+                } else if chat.type == .group {
+                    VStack(alignment: .leading) {
+                        Text(chat.title)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.leading, 6)
+                    }
+                    Spacer()
+                    
+                    NavigationLink(destination: EditGroupView(
+                        chat: chat,
+                        nearbyProfiles: nearbyProfiles,
+                        onSave: { updatedDraft in
+                            // Create updated chat with new data
+                            var updatedChat = chat
+                            updatedChat.title = updatedDraft.name
+                            updatedChat.about = updatedDraft.about
+                            updatedChat.color = updatedDraft.color
+                            updatedChat.members = updatedDraft.selectedMembers
+                            onGroupUpdated?(updatedChat)
+                        }
+                    )) {
+                        Image("Call")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                } else {
+                    VStack(alignment: .leading) {
+                        Text(chat.title)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.leading, 6)
+                    }
+                    Spacer()
                 }
-                Spacer()
-
-                Image(systemName: "ellipsis")
-                    .opacity(0)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
         }
         .frame(height: 56)
+    }
+    
+    private var statusText: String {
+        guard chat.type == .privateDM else { return "" }
+        
+        let presence = chat.members.first?.presence ?? .unknown
+        switch presence {
+        case .inRange:
+            return "Nearby"
+        case .outOfRange, .unknown:
+            return lastSeenText
+        }
+    }
+    
+    private var lastSeenText: String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        
+        if calendar.isDateInToday(chat.lastActivity) {
+            formatter.dateFormat = "'Last seen at' HH:mm"
+        } else if calendar.isDateInYesterday(chat.lastActivity) {
+            return "Last seen yesterday"
+        } else {
+            formatter.dateFormat = "'Last seen on' MM d"
+        }
+        
+        return formatter.string(from: chat.lastActivity)
     }
 }
 
@@ -189,19 +252,32 @@ struct ChatHeader: View {
 
 struct ChatRoomView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var chatStore: ChatStore
+    let initialChat: Chat
+    let nearbyProfiles: [NearbyProfile]
+    
+    @State private var chat: Chat
     @State private var input = ""
-    @State private var messages: [ChatMessage] = [
-        .init(
-            text: "Need more people here.",
-            time: Date().addingTimeInterval(-3600), isMe: true),
-        .init(
-            text: "Do you know what time it is?",
-            time: Date().addingTimeInterval(-120), isMe: false),
-    ]
+    @State private var messages: [ChatMessage]
+    
+    init(chat: Chat, nearbyProfiles: [NearbyProfile] = []) {
+        self.initialChat = chat
+        self.nearbyProfiles = nearbyProfiles
+        _chat = State(initialValue: chat)
+        _messages = State(initialValue: chat.messages)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            ChatHeader(title: "Seputa Team1") { dismiss() }
+            ChatHeader(
+                chat: chat,
+                nearbyProfiles: nearbyProfiles,
+                back: { dismiss() },
+                onGroupUpdated: { updatedChat in
+                    chat = updatedChat
+                    chatStore.updateChat(updatedChat)
+                }
+            )
 
             ZStack {
                 Color.canvasSand.ignoresSafeArea()
@@ -245,4 +321,4 @@ struct ChatRoomView: View {
 }
 
 // MARK: - Preview
-#Preview { NavigationStack { ChatRoomView() } }
+//#Preview { NavigationStack { ChatRoomView() } }

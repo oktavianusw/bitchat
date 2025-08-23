@@ -10,7 +10,8 @@ import SwiftUI
 struct ChatsSectionView: View {
     var items: [ChatItem]
     var accent: Color = .orange
-    var onTapRow: ((ChatItem) -> Void)? = nil
+    @EnvironmentObject var chatStore: ChatStore
+//    var onTapRow: ((ChatItem) -> Void)? = nil
     
     var body: some View {
         if items.isEmpty {
@@ -18,14 +19,12 @@ struct ChatsSectionView: View {
                 .padding(.horizontal, 20)
         } else {
             VStack(alignment: .leading, spacing: 12) {
-                SectionHeaderView(title: "Views", textStyle: .largeTitle)
+                SectionHeaderView(title: "Chats", textStyle: .largeTitle)
                 .padding(.horizontal, 20)
 
                 ListLikeContainer {
                     ForEach(items) { item in
-                        Button {
-                            onTapRow?(item)
-                        } label: {
+                        NavigationLink(value: item) {
                             ChatListRowView(item: item, accent: accent)
                         }
                         .buttonStyle(.plain)
@@ -54,11 +53,11 @@ private struct ListLikeContainer<Content: View>: View {
 
 #Preview("Chats – With items") {
     let sample: [ChatItem] = [
-        ChatItem(title: "Public Channel",
+        ChatItem(id: UUID(), title: "Public Channel",
                  time: "19:45", unreadCount: 1, pinned: true,
                  iconSystemName: "megaphone.fill",
                  iconBackground: Color(.systemYellow)),
-        ChatItem(title: "Design",
+        ChatItem(id: UUID(),title: "Design",
                  time: "18:12", unreadCount: 0, pinned: false,
                  iconSystemName: "paintbrush.fill",
                  iconBackground: Color(.systemTeal))

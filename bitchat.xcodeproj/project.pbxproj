@@ -79,6 +79,8 @@
 		375158B82E5765A2000DBA7C /* CreateCircleDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375158B62E5765A2000DBA7C /* CreateCircleDraft.swift */; };
 		375158C32E585383000DBA7C /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375158C22E585383000DBA7C /* ChatStore.swift */; };
 		375158C42E585383000DBA7C /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375158C22E585383000DBA7C /* ChatStore.swift */; };
+		3751592F2E597C2D000DBA7C /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3751592E2E597C2D000DBA7C /* EditGroupView.swift */; };
+		375159302E597C2D000DBA7C /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3751592E2E597C2D000DBA7C /* EditGroupView.swift */; };
 		37548C0A2E54D0790060AB1C /* NearbyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37548C092E54D0790060AB1C /* NearbyProfile.swift */; };
 		37548C0B2E54D0790060AB1C /* NearbyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37548C092E54D0790060AB1C /* NearbyProfile.swift */; };
 		37548C162E5521F40060AB1C /* ChatItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37548C152E5521F40060AB1C /* ChatItem.swift */; };
@@ -199,6 +201,7 @@
 		375158A12E55EA09000DBA7C /* ChatRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomView.swift; sourceTree = "<group>"; };
 		375158B62E5765A2000DBA7C /* CreateCircleDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCircleDraft.swift; sourceTree = "<group>"; };
 		375158C22E585383000DBA7C /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		3751592E2E597C2D000DBA7C /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
 		37548C092E54D0790060AB1C /* NearbyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyProfile.swift; sourceTree = "<group>"; };
 		37548C152E5521F40060AB1C /* ChatItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatItem.swift; sourceTree = "<group>"; };
 		37FFE43E2E54265C009DB4CB /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -446,6 +449,7 @@
 				A08E03AA0C63E97C91749AEC /* ContentView.swift */,
 				9AC141774F6671FCDC347DC7 /* LinkPreviewView.swift */,
 				375158A12E55EA09000DBA7C /* ChatRoomView.swift */,
+				3751592E2E597C2D000DBA7C /* EditGroupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -715,6 +719,7 @@
 				04F127FE2E37EF3D00FFBA8D /* BitchatPeer.swift in Sources */,
 				04F128062E37F10000FFBA8D /* PeerSession.swift in Sources */,
 				046D705E2E3C105D00C00594 /* InputValidator.swift in Sources */,
+				3751592F2E597C2D000DBA7C /* EditGroupView.swift in Sources */,
 				04B6BA572E203D6C0090FE39 /* FingerprintView.swift in Sources */,
 				04636BED2E30CD4A00FBCFA8 /* NoiseHandshakeCoordinator.swift in Sources */,
 				C99763A4761567F587D21688 /* MessageRetryService.swift in Sources */,
@@ -766,6 +771,7 @@
 				04F127FF2E37EF3D00FFBA8D /* BitchatPeer.swift in Sources */,
 				04F128082E37F10000FFBA8D /* PeerSession.swift in Sources */,
 				046D705D2E3C105D00C00594 /* InputValidator.swift in Sources */,
+				375159302E597C2D000DBA7C /* EditGroupView.swift in Sources */,
 				04B6BA552E203D6C0090FE39 /* FingerprintView.swift in Sources */,
 				04636BEE2E30CD4A00FBCFA8 /* NoiseHandshakeCoordinator.swift in Sources */,
 				CEAE115C9C3EB3C4ED82F128 /* MessageRetryService.swift in Sources */,

@@ -9,6 +9,15 @@ import SwiftUI
 struct Homepage: View {
     @StateObject private var chatStore = ChatStore()
     
+    let nearbyProfiles: [NearbyProfile] = [
+        .init(name: "Saputra", team: "Team 1", image: Image("picture1"), initials: "SU"),
+        .init(name: "Ayu",     team: "Team 2", image: Image("picture2"), initials: "AY"),
+        .init(name: "Putri",   team: "Team 3", image: Image("picture3"), initials: "PT"),
+        .init(name: "Fahrel",    team: "Team 5", image: Image("picture1"), initials: "FA"),
+        .init(name: "Bam",    team: "Team 4", image: Image("picture2"), initials: "BAM"),
+        .init(name: "Wentao",    team: "Team 1", image: Image("picture4"), initials: "WE")
+    ]
+    
     init(store: ChatStore = ChatStore()) {
         _chatStore = StateObject(wrappedValue: store)
         let tabBarAppearance = UITabBarAppearance()
@@ -53,6 +62,17 @@ struct Homepage: View {
                     }
             }
             .tint(Color.brandPrimary)
+            .navigationDestination(for: ChatItem.self) { item in
+                if let chat = chatStore.chat(for: item.id) {
+                    ChatRoomView(
+                        chat: chat,
+                        nearbyProfiles: nearbyProfiles
+                    )
+                    .environmentObject(chatStore)
+                } else {
+                    Text("Chat not found")
+                }
+            }
         }
         .environmentObject(chatStore)
     }
